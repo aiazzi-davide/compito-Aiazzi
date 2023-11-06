@@ -2,6 +2,10 @@ package com.example;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        String ip = "localhost";
+        int porta = 3000;
+        ClientStr client = new ClientStr();
+        client.connetti(ip, porta);
+        client.comunica();
     }
 }
