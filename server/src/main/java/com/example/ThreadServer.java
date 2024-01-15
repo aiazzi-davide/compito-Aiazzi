@@ -1,5 +1,9 @@
 package com.example;
 import java.util.*;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import java.net.*;
 import java.io.*;
 
@@ -20,7 +24,7 @@ public class ThreadServer extends Thread {
     BufferedReader inDalClient;
     DataOutputStream outVersoClient;
     boolean exit = false;
-    String lista = "";
+    list_pojo lista = new list_pojo();
 
     public ThreadServer(Socket c) {
         this.client = c;
@@ -54,7 +58,7 @@ public class ThreadServer extends Thread {
                 case "/list":
                     if (lista.isEmpty()) {
                         outVersoClient.writeBytes(ANSI_YELLOW + "La lista e' vuota :(" + ANSI_RESET + '\n');
-                    } else outVersoClient.writeBytes(lista + '\n');
+                    } else outVersoClient.writeBytes(serializeList(lista) + '\n');
                     break;
 
                 default:
@@ -79,10 +83,20 @@ public class ThreadServer extends Thread {
     }
 
     public void buildList(String stringaRicevuta) {
-        if (lista.isEmpty()) {
-            lista += stringaRicevuta;
-        } else{
-            lista += ", " + stringaRicevuta;
+        lista.add(stringaRicevuta);
+    }
+    public String serializeList(list_pojo lista) {
+        String s1;
+        try {
+            System.out.println("Serializing list...");
+            ObjectMapper Mapper = new ObjectMapper();
+            s1 = Mapper.writeValueAsString(lista);
+            Mapper.writeValue(new File("test.json"), lista);
+            return s1;
+
+        } catch (Exception i) {
+            i.printStackTrace();
         }
-        }
+        return "error";
+    }
 }

@@ -43,11 +43,10 @@ public class ClientStr {
         try {
             //ricevo stringa iniziale
             System.out.println(inDalServer.readLine());
+            ThreadClient t = new ThreadClient(miosocket);
+            t.start();
 
             while (!exit) {
-
-                //ricevo stringa
-                System.out.println(inDalServer.readLine());
 
                 //scrivo la risposta al server
                 stringaUtente = input.next();
@@ -58,8 +57,7 @@ public class ClientStr {
                     exit = true;
                 }
                 //stampa risposta
-                risposta = inDalServer.readLine();
-                System.out.println("SERVER: " + risposta + '\n');
+                
 
             }
             miosocket.close();
